@@ -186,6 +186,39 @@ exports.giveBonusPoints = async (req, res) => {
   }
 };
 
+// Kudos Gifting: Transfer points between users
+exports.giftPoints = async (req, res) => {
+  try {
+    const { recipientId, points, message } = req.body;
+    const senderId = req.user.id;
+
+    if (senderId === recipientId) return res.status(400).json({ message: "You cannot gift points to yourself" });
+    if (points <= 0) return res.status(400).json({ message: "Invalid points amount" });
+
+    const [sender, recipient] = await Promise.all([
+      User.findById(senderId),
+      User.findById(recipientId)
+    ]);
+
+    if (!sender || !recipient) return res.status(404).json({ message: "User not found" });
+    if (sender.rewardPoints < points) return res.status(400).json({ message: "Insufficient points balance" });
+
+    // Transaction
+    sender.rewardPoints -= points;
+    recipient.rewardPoints += points;
+    recipient.pointsEarned += points; // Gifting counts towards lifetime earned for the recipient
+
+    await Promise.all([sender.save(), recipient.save()]);
+
+    await createNotification(recipientId, 'You received a Kudos Gift!', `${sender.name} gifted you ${points} points: "${message}"`, 'reward');
+    await createNotification(senderId, 'Gift Sent Successfully', `You gifted ${points} points to ${recipient.name}`, 'reward');
+
+    res.json({ message: `Success! ${points} points gifted to ${recipient.name}`, currentPoints: sender.rewardPoints });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // Get all redemptions
 exports.getRedemptions = async (req, res) => {
   try {

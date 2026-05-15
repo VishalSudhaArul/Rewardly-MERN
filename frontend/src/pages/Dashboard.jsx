@@ -168,6 +168,21 @@ export default function Dashboard() {
             <p className="mt-3 text-muted" style={{ lineHeight: 1.6 }}>
                {aiData?.message || 'Analyzing your productivity data...'}
             </p>
+            
+            {aiData?.growthTasks?.length > 0 && (
+              <div className="mt-3">
+                <h4 className="text-xs font-bold text-muted mb-2 uppercase">Your Growth Roadmap</h4>
+                <div className="flex-column gap-2">
+                  {aiData.growthTasks.map((t, i) => (
+                    <div key={i} className="flex-between p-2 rounded" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
+                      <span className="text-sm">{t.task}</span>
+                      <span className="text-primary-light font-bold">+{t.points} pts</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
             <button className="btn btn-primary mt-3" onClick={() => setShowAI(false)} style={{ width: '100%', justifyContent: 'center' }}>Close Audit</button>
           </div>
         </div>

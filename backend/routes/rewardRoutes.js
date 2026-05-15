@@ -7,6 +7,7 @@ const {
   getDashboardStats,
   redeemPoints,
   giveBonusPoints,
+  giftPoints,
   getRedemptions,
   approveRedemption
 } = require('../controllers/rewardController');
@@ -15,6 +16,7 @@ const { protect, adminOnly } = require('../middleware/auth');
 router.post('/calculate', protect, adminOnly, calculateReward);
 router.post('/redeem', protect, redeemPoints);
 router.post('/bonus', protect, adminOnly, giveBonusPoints);
+router.post('/gift', protect, giftPoints);
 router.get('/redemptions', protect, getRedemptions);
 router.get('/me', protect, getMyRewards);
 router.get('/all', protect, adminOnly, getAllRewards);

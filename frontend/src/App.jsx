@@ -20,24 +20,34 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
+import CelebrationModal from './components/CelebrationModal';
+
 function AppRoutes() {
-  const { user } = useAuth();
+  const { user, celebration, setCelebration } = useAuth();
   return (
-    <Routes>
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-      <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-      <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route index element={<Navigate to="/dashboard" />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="attendance" element={<Attendance />} />
-        <Route path="performance" element={<Performance />} />
-        <Route path="feedback" element={<FeedbackPage />} />
-        <Route path="rewards" element={<RewardsPage />} />
-        <Route path="leaderboard" element={<Leaderboard />} />
-        <Route path="admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
-      </Route>
-      <Route path="*" element={<Navigate to="/dashboard" />} />
-    </Routes>
+    <>
+      {celebration && (
+        <CelebrationModal 
+          {...celebration} 
+          onClose={() => setCelebration(null)} 
+        />
+      )}
+      <Routes>
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+        <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
+        <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+          <Route index element={<Navigate to="/dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="attendance" element={<Attendance />} />
+          <Route path="performance" element={<Performance />} />
+          <Route path="feedback" element={<FeedbackPage />} />
+          <Route path="rewards" element={<RewardsPage />} />
+          <Route path="leaderboard" element={<Leaderboard />} />
+          <Route path="admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+        </Route>
+        <Route path="*" element={<Navigate to="/dashboard" />} />
+      </Routes>
+    </>
   );
 }
 

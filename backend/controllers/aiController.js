@@ -52,10 +52,17 @@ exports.getPersonalAudit = async (req, res) => {
       To reach the ${nextTier} tier faster, we recommend: ${improvements.length > 0 ? improvements.join(' and ') : 'maintaining your current momentum'}. 
       Keep up the great work!`;
 
+    const growthTasks = [];
+    if (presentDays < 15) growthTasks.push({ task: "Improve attendance consistency", points: 20 });
+    if (performance && performance.overallScore < 85) growthTasks.push({ task: "Enhance project quality score", points: 30 });
+    if (feedbacks.length < 3) growthTasks.push({ task: "Collaborate more with teammates", points: 25 });
+    if (growthTasks.length === 0) growthTasks.push({ task: "Mentor a junior employee", points: 50 });
+
     res.json({
       efficiency,
       nextTier,
       message,
+      growthTasks,
       auditDate: new Date()
     });
   } catch (err) {

@@ -44,6 +44,7 @@ export const feedbackAPI = {
 export const rewardAPI = {
   calculate: (data) => API.post('/rewards/calculate', data),
   redeem: (data) => API.post('/rewards/redeem', data),
+  giftPoints: (data) => API.post('/rewards/gift', data),
   giveBonus: (data) => API.post('/rewards/bonus', data),
   getRedemptions: () => API.get('/rewards/redemptions'),
   getMine: () => API.get('/rewards/me'),
