@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const performanceSchema = new mongoose.Schema({
-  employee: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  month: { type: String, required: true }, // "YYYY-MM"
+  employee: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  month: { type: String, required: true, index: true }, // "YYYY-MM"
   targetAchievement: { type: Number, default: 0 }, // 0-100
   qualityScore: { type: Number, default: 0 },      // 0-100
   teamworkScore: { type: Number, default: 0 },     // 0-100

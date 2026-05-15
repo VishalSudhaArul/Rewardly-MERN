@@ -44,7 +44,7 @@ exports.checkOut = async (req, res) => {
 // Get my attendance
 exports.getMyAttendance = async (req, res) => {
   try {
-    const records = await Attendance.find({ employee: req.user.id }).sort({ date: -1 });
+    const records = await Attendance.find({ employee: req.user.id }).sort({ date: -1 }).lean();
     res.json(records);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -54,7 +54,7 @@ exports.getMyAttendance = async (req, res) => {
 // Get all attendance (admin/manager)
 exports.getAllAttendance = async (req, res) => {
   try {
-    const records = await Attendance.find().populate('employee', 'name department').sort({ date: -1 });
+    const records = await Attendance.find().populate('employee', 'name department').sort({ date: -1 }).lean();
     res.json(records);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -65,7 +65,7 @@ exports.getAllAttendance = async (req, res) => {
 exports.getTodayStatus = async (req, res) => {
   try {
     const today = new Date().toISOString().split('T')[0];
-    const record = await Attendance.findOne({ employee: req.user.id, date: today });
+    const record = await Attendance.findOne({ employee: req.user.id, date: today }).lean();
     res.json(record || null);
   } catch (err) {
     res.status(500).json({ message: err.message });

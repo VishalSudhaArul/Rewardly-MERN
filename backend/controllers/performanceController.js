@@ -27,7 +27,7 @@ exports.submitPerformance = async (req, res) => {
 // Get my performance history
 exports.getMyPerformance = async (req, res) => {
   try {
-    const records = await Performance.find({ employee: req.user.id }).sort({ month: -1 });
+    const records = await Performance.find({ employee: req.user.id }).sort({ month: -1 }).lean();
     res.json(records);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -37,7 +37,7 @@ exports.getMyPerformance = async (req, res) => {
 // Get all performance (admin)
 exports.getAllPerformance = async (req, res) => {
   try {
-    const records = await Performance.find().populate('employee', 'name department designation').sort({ month: -1 });
+    const records = await Performance.find().populate('employee', 'name department designation').sort({ month: -1 }).lean();
     res.json(records);
   } catch (err) {
     res.status(500).json({ message: err.message });
